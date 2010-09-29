@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'open3'
-require 'yaml'
 include Process
 
 class MinecraftServer
@@ -54,19 +53,7 @@ class MinecraftServer
 	end
 end
 
-ITEMS = YAML.load_file('./data_values.yaml')
-class Item
-	def self.find(id)
-		ITEMS[id]
-	end
-
-	def self.find_by_name(name)
-		ITEMS.select {|key, value| value.downcase == name.downcase}
-	end
-end
-
 @messages = {}
-
 @server = MinecraftServer.new("java -Xmx1024M -Xms1024M -jar minecraft_server.jar nogui")
 
 while line = @server.gets
@@ -97,6 +84,8 @@ while line = @server.gets
 	when /\[INFO\] <(\w+)> (.*)/
 		user = $1
 		message = $2.strip
+	when /\[INFO\] (\w+) issued server command: water/
+		@server.puts "give #{$1} 8"
 	end
 	puts line
 end

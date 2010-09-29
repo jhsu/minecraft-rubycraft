@@ -63,7 +63,7 @@ while line = @server.gets
     puts "Ready to accept commands"
   when /\[INFO\] (\w+) \[.*\] logged in/
     user = $1.downcase
-    @server.puts "say players: #{@server.players.join(',')}"
+    @server.puts "tell #{user} players online: #{@server.players.join(',')}"
     if @messages[user] && @messages[user].any?
       @messages[user].each {|msg| @server.puts "tell #{user} msg"}
     end
